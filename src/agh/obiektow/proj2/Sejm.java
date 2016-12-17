@@ -24,15 +24,15 @@ public class Sejm {
 	Posel najdrozszaPodroz;
 	
 	
-	public Sejm() throws MalformedURLException, IOException, ParseException {
+	public Sejm() throws  IOException, ParseException {
 		try (Scanner scan = new Scanner(new BufferedReader(
 				new InputStreamReader(new URL("https://api-v3.mojepanstwo.pl/dane/poslowie.json").openStream())))) {
 			StringBuilder text = new StringBuilder();
 			while (scan.hasNextLine()) {
 				text.append(scan.nextLine());
 			}
-			//JSONParser parser = new JSONParser();
 			JSONObject json = (JSONObject) JSONValue.parse(text.toString());
+			
 			JSONArray data = (JSONArray) json.get("Dataobject");
 			//JSONArray pos = (JSONArray) data.get("data");
 			System.out.println(data.get(0));
