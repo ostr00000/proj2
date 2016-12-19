@@ -3,8 +3,6 @@ package agh.obiektow.proj2;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-import org.json.simple.parser.ParseException;
-
 public class MainProj2 {
 	public static void main(String[] args) {
 		try {
@@ -18,7 +16,7 @@ public class MainProj2 {
 			System.out.println("argument 1. musi byc liczba od 1 do 7 wlacznie");
 		} catch (MalformedURLException e) {
 			System.out.println("problem ze strona");
-		} catch (IOException | ParseException e) {
+		} catch (IOException e) {
 			System.out.println("problem ze odczytem");
 		}
 	}
