@@ -5,46 +5,61 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.simple.*;
 
 public class Sejm {
-	HashMap<Integer,Posel> poslowie;
+	HashMap<String, Posel> poslowie;
 	double sredniaWydatkow;
+	
+	public Sejm()  {
+		
+		//JSONArray dataobject = (JSONArray) json.get("Dataobject");	
+		
+		
+	}
+	public void szukajPoslow()throws MalformedURLException, IOException{
+		JSONObject json = pobierzDane("https://api-v3.mojepanstwo.pl/dane/poslowie.json");
+		int liczbaStron = ileStron(json);
+		WyszukaniaNaStronie [] szukanie = new WyszukaniaNaStronie [liczbaStron+1];
+		for(int i=0;i<=liczbaStron;i++){
+			szukanie[i] = new WyszukaniaNaStronie(this,i);
+			szukanie[i].run();
+		}
 
-	public Sejm() throws MalformedURLException, IOException {
-		try (Scanner scan = new Scanner(new BufferedReader(
-				new InputStreamReader(new URL("https://api-v3.mojepanstwo.pl/dane/poslowie.json").openStream())))) {
-
+		
+	}
+	static public JSONObject pobierzDane(String url) {
+		try (Scanner scan = new Scanner(new BufferedReader(new InputStreamReader(new URL(url).openStream())))) {
 			StringBuilder text = new StringBuilder();
 			while (scan.hasNextLine()) {
 				text.append(scan.nextLine());
 			}
-			System.out.println(text.toString());
-			JSONObject json = (JSONObject) JSONValue.parse(text.toString());
-
-			// JSONArray data = (JSONArray) json.get("Dataobject");
-			// JSONArray pos = (JSONArray) data.get("data");
-			// System.out.println(data.get(0));
-			// JSONObject geoObject = json.getJSONObject("Dataobject");
-
+			JSONObject ret = (JSONObject) JSONValue.parse(text.toString());
+			return ret;
+		} catch (MalformedURLException e) {
+			System.out.println("problem z url");
+		} catch (IOException e) {
+			System.out.println("problem z odczytem");
 		}
+		return null;// poprawic?
+	}
+	public void addPosla(Posel kolejny){
+		poslowie.put(kolejny.imieNazwisko, kolejny);
 	}
 
-	private InfromacjeOgolne getInfo(int nrStrony) throws MalformedURLException, IOException {
-		try (Scanner scan = new Scanner(new BufferedReader(new InputStreamReader(new URL(
-				"https://api-v3.mojepanstwo.pl/dane/poslowie.json?_type=objects&page=" + String.valueOf(nrStrony))
-						.openStream())))) {
-			StringBuilder text = new StringBuilder();
-			while (scan.hasNextLine()) {
-				text.append(scan.nextLine());
-			}
-			//System.out.println(text.toString());
-			JSONObject json = (JSONObject) JSONValue.parse(text.toString());
-			JSONArray dataobject = (JSONArray) json.get("Dataobject");
-		}
+	private int ileStron(JSONObject json)throws IOException {
+		JSONObject links = (JSONObject) json.get("Links");
+		String lastPage = (String) links.get("last");
+		Pattern liczbaNaKoncu = Pattern.compile("(\\d+)$");
+		Matcher dopasowane = liczbaNaKoncu.matcher(lastPage);
+		if (!dopasowane.find())
+			throw new IOException();
+		return Integer.valueOf(lastPage.substring(dopasowane.start()));
 	}
+	
 }

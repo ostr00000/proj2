@@ -8,7 +8,7 @@ public class MainProj2 {
 		try {
 			Argumenty arg = new Argumenty(args);
 			Sejm pobraneDane = new Sejm();
-			 
+			pobraneDane.szukajPoslow();
 			
 		} catch (ArrayIndexOutOfBoundsException e) {
 			System.out.println(e);
