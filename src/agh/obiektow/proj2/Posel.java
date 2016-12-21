@@ -32,6 +32,7 @@ public class Posel implements Runnable {
 
 		obliczWydatki(layers);
 		obliczPodroze(layers);
+		System.out.println("zakonczono dodawanie posla o id="+this.idPosla);
 	}
 
 	private void ustawWyjazdyCena(JSONObject data) {

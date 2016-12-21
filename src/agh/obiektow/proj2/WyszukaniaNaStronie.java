@@ -42,5 +42,6 @@ public class WyszukaniaNaStronie implements Runnable {
 			}
 			sejm.addPosla(listaPoslow[i]);
 		}
+		System.out.println("zakonczono szukanie na stronie "+ this.nrStrony);
 	}
 }

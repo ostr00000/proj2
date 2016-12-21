@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Scanner;
 
 import org.json.simple.JSONObject;
@@ -18,7 +19,7 @@ public class JsonFromUrl {
 	}
 	
 	public JSONObject pobierzDane() {
-		try (Scanner scan = new Scanner(new BufferedReader(new InputStreamReader(new URL(this.url).openStream())))) {
+		try (Scanner scan = new Scanner(new BufferedReader(new InputStreamReader(((new URL(this.url)).openConnection()).getInputStream() )))) {
 			StringBuilder text = new StringBuilder();
 			while (scan.hasNextLine()) {
 				text.append(scan.nextLine());

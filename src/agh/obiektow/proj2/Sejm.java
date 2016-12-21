@@ -39,6 +39,7 @@ public class Sejm {
 				this.info.modyfikuj(szukanie[i].info);
 			}
 		}
+		System.out.println("zakonczono szukanie");
 		
 	}
 
