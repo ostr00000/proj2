@@ -1,8 +1,12 @@
 package agh.obiektow.proj2;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 public class WyszukaniaNaStronie implements Runnable {
 	Sejm sejm;
 	int nrStrony;
+	InfromacjeOgolne info=null;
 	
 	WyszukaniaNaStronie(Sejm sejm,int nrStrony){
 		this.sejm=sejm;
@@ -11,8 +15,32 @@ public class WyszukaniaNaStronie implements Runnable {
 	
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		JsonFromUrl dane = new JsonFromUrl("https://api-v3.mojepanstwo.pl/dane/poslowie.json?_type=objects&page="+Integer.valueOf(nrStrony));
+		JSONObject json=dane.pobierzDane();
+		JSONArray dataobject = (JSONArray) json.get("Dataobject");
+		int size=dataobject.size();
+		Posel [] listaPoslow = new Posel[size];
+		Thread threads [] = new Thread [size];
+		for(int i=0;i<size;i++){
+			JSONObject index = (JSONObject)dataobject.get(i);
+			int id= Integer.valueOf((String)index.get("id"));
+			listaPoslow[i]=new Posel(id);
+			threads[i]=new Thread(listaPoslow[i]);
+			threads[i].run();
+		}
 		
+		for(int i=0;i<size;i++){
+			try {
+				threads[i].join();
+			} catch (InterruptedException e) {
+				System.out.println("watek przerwany");
+			}
+			if(0==i){
+				info = new InfromacjeOgolne(listaPoslow[0]);
+			}else{
+				info.sprawdzPosla(listaPoslow[i]);
+			}
+			sejm.addPosla(listaPoslow[i]);
+		}
 	}
-
 }

@@ -14,45 +14,40 @@ import org.json.simple.*;
 
 public class Sejm {
 	HashMap<String, Posel> poslowie;
-	double sredniaWydatkow;
-	
-	public Sejm()  {
-		
-		//JSONArray dataobject = (JSONArray) json.get("Dataobject");	
-		
-		
-	}
-	public void szukajPoslow()throws MalformedURLException, IOException{
-		JSONObject json = pobierzDane("https://api-v3.mojepanstwo.pl/dane/poslowie.json");
-		int liczbaStron = ileStron(json);
-		WyszukaniaNaStronie [] szukanie = new WyszukaniaNaStronie [liczbaStron+1];
-		for(int i=0;i<=liczbaStron;i++){
-			szukanie[i] = new WyszukaniaNaStronie(this,i);
-			szukanie[i].run();
-		}
+	InfromacjeOgolne info=null;
 
+	public Sejm() {
+		this.poslowie = new HashMap<String, Posel>();
+	}
+
+	public void szukajPoslow() throws MalformedURLException, IOException, InterruptedException {
+		JsonFromUrl dane = new JsonFromUrl("https://api-v3.mojepanstwo.pl/dane/poslowie.json");
+		JSONObject json = dane.pobierzDane();
+		int liczbaStron = ileStron(json);
+		WyszukaniaNaStronie[] szukanie = new WyszukaniaNaStronie[liczbaStron + 1];
+		Thread threads[] = new Thread[liczbaStron + 1];
+		for (int i = 0; i <= liczbaStron; i++) {
+			szukanie[i] = new WyszukaniaNaStronie(this, i);
+			threads[i] = new Thread(szukanie[i]);
+			threads[i].run();
+		}
+		for(int i=0;i<=liczbaStron ;i++){
+			threads[i].join();
+			if(0==i){
+				this.info=szukanie[0].info;
+			}else{
+				this.info.modyfikuj(szukanie[i].info);
+			}
+		}
 		
 	}
-	static public JSONObject pobierzDane(String url) {
-		try (Scanner scan = new Scanner(new BufferedReader(new InputStreamReader(new URL(url).openStream())))) {
-			StringBuilder text = new StringBuilder();
-			while (scan.hasNextLine()) {
-				text.append(scan.nextLine());
-			}
-			JSONObject ret = (JSONObject) JSONValue.parse(text.toString());
-			return ret;
-		} catch (MalformedURLException e) {
-			System.out.println("problem z url");
-		} catch (IOException e) {
-			System.out.println("problem z odczytem");
-		}
-		return null;// poprawic?
-	}
-	public void addPosla(Posel kolejny){
+
+	
+	public void addPosla(Posel kolejny) {
 		poslowie.put(kolejny.imieNazwisko, kolejny);
 	}
 
-	private int ileStron(JSONObject json)throws IOException {
+	private int ileStron(JSONObject json) throws IOException {
 		JSONObject links = (JSONObject) json.get("Links");
 		String lastPage = (String) links.get("last");
 		Pattern liczbaNaKoncu = Pattern.compile("(\\d+)$");
@@ -61,5 +56,5 @@ public class Sejm {
 			throw new IOException();
 		return Integer.valueOf(lastPage.substring(dopasowane.start()));
 	}
-	
+
 }

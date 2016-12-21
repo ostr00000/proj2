@@ -9,7 +9,7 @@ public class MainProj2 {
 			Argumenty arg = new Argumenty(args);
 			Sejm pobraneDane = new Sejm();
 			pobraneDane.szukajPoslow();
-			
+
 		} catch (ArrayIndexOutOfBoundsException e) {
 			System.out.println(e);
 		} catch (NumberFormatException e) {
@@ -18,6 +18,10 @@ public class MainProj2 {
 			System.out.println("problem ze strona");
 		} catch (IOException e) {
 			System.out.println("problem ze odczytem");
+		//} catch (ClassCastException e) {
+		//	System.out.println("problem z typem w json\n" + e.getMessage());
+		} catch (InterruptedException e) {
+			System.out.println("watek przerwany");
 		}
 	}
 }

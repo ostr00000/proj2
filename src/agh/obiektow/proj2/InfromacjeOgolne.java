@@ -14,26 +14,31 @@ public class InfromacjeOgolne {
 		this.sumaSumWydatkow = pierwszyPosel.sumaWydatkow;
 		liczbaPoslow=1;
 	}
-	public InfromacjeOgolne(InfromacjeOgolne left,InfromacjeOgolne right){
-		this.maxWyjazdow=(left.maxWyjazdow.liczbaWyjazdy>right.maxWyjazdow.liczbaWyjazdy)?left.maxWyjazdow:right.maxWyjazdow;
-		this.najduzejZaGranica=(left.najduzejZaGranica.liczbaWyjazdy>right.najduzejZaGranica.liczbaWyjazdy)?left.najduzejZaGranica:right.najduzejZaGranica;
-		this.maxCenaPodroz=(left.maxCenaPodroz.liczbaWyjazdy>right.maxCenaPodroz.liczbaWyjazdy)?left.maxCenaPodroz:right.maxCenaPodroz;
-		this.sumaSumWydatkow=left.sumaSumWydatkow+right.sumaSumWydatkow;
-		this.liczbaPoslow= left.liczbaPoslow+right.liczbaPoslow;
+	
+	
+	public void modyfikuj(InfromacjeOgolne doPorownania){
+		this.maxWyjazdow=choseMaxWyjazdow(this.maxWyjazdow,doPorownania.maxWyjazdow);
+		this.najduzejZaGranica=choseNajduzejZaGranica(this.najduzejZaGranica,doPorownania.najduzejZaGranica);
+		this.maxCenaPodroz=choseMaxCenaPodroz(this.maxCenaPodroz,doPorownania.maxCenaPodroz);
+		this.sumaSumWydatkow=this.sumaSumWydatkow+doPorownania.sumaSumWydatkow;
+		this.liczbaPoslow= this.liczbaPoslow+doPorownania.liczbaPoslow;
 	}
 	
 	void sprawdzPosla(Posel kolejnyPosel){
-		if(this.maxWyjazdow.liczbaWyjazdy>kolejnyPosel.liczbaWyjazdy){
-			this.maxWyjazdow.liczbaWyjazdy=kolejnyPosel.liczbaWyjazdy;
-		}
-		if(this.najduzejZaGranica.dniZaGranica>kolejnyPosel.dniZaGranica){
-			this.najduzejZaGranica.dniZaGranica=kolejnyPosel.dniZaGranica;
-		}
-		if(this.najduzejZaGranica.dniZaGranica>kolejnyPosel.dniZaGranica){
-			this.najduzejZaGranica.dniZaGranica=kolejnyPosel.dniZaGranica;
-		}
+		this.maxWyjazdow=choseMaxWyjazdow(this.maxWyjazdow,kolejnyPosel);
+		this.najduzejZaGranica=choseNajduzejZaGranica(this.najduzejZaGranica,kolejnyPosel);
+		this.maxCenaPodroz=choseMaxCenaPodroz(this.maxCenaPodroz,kolejnyPosel);
 		sumaSumWydatkow+=kolejnyPosel.sumaWydatkow;
 		liczbaPoslow++;
 	}
 	
+	private Posel choseMaxWyjazdow(Posel left,Posel right){
+		return (left.liczbaWyjazdow>right.liczbaWyjazdow)?left:right;
+	}
+	private Posel choseNajduzejZaGranica(Posel left,Posel right){
+		return (left.dniZaGranica>right.dniZaGranica)?left:right;
+	}
+	private Posel choseMaxCenaPodroz(Posel left,Posel right){
+		return (left.najdrozszaPodroz>right.najdrozszaPodroz)?left:right;
+	}
 }
