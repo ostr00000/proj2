@@ -23,9 +23,11 @@ public class WyszukaniaNaStronie implements Runnable {
 		Posel[] listaPoslow = new Posel[size];
 		Thread threads[] = new Thread[size];
 		for (int i = 0; i < size; i++) {
+			if (czyPrzerwac(0, i, threads))
+				return;
 			JSONObject index = (JSONObject) dataobject.get(i);
 			int id = Integer.valueOf((String) index.get("id"));
-			listaPoslow[i] = new Posel(id);
+			listaPoslow[i] = new Posel(id, this.sejm);
 			threads[i] = new Thread(listaPoslow[i]);
 			threads[i].run();
 		}
@@ -36,16 +38,14 @@ public class WyszukaniaNaStronie implements Runnable {
 			try {
 				threads[i].join();
 			} catch (InterruptedException e) {
-				System.out.println("watek przerwany");
+				return;//jesli watek przerwany to juz znaleziono
 			}
 			if (0 == i) {
 				info = new InfromacjeOgolne(listaPoslow[0]);
 			} else {
 				info.sprawdzPosla(listaPoslow[i]);
 			}
-			sejm.addPosla(listaPoslow[i]);
 		}
-		System.out.println("zakonczono szukanie na stronie " + this.nrStrony);
 	}
 
 	private boolean czyPrzerwac(int poczatkeKonczeniaWatkow, int koniecKonczeniaWatkow, Thread[] threads) {

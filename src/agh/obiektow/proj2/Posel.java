@@ -12,13 +12,15 @@ public class Posel implements Runnable {
 	int dniZaGranica = 0;
 	double najdrozszaPodroz = 0;
 	Boolean odwiedzilWlochy = false;
-
-	Posel(int id) {
+	Sejm sejm;
+	
+	Posel(int id,Sejm sejm) {
 		this.idPosla = id;
+		this.sejm=sejm;
 	}
 
 	public void run() {
-		if (Thread.interrupted())
+		if (Thread.currentThread().isInterrupted())
 			return;
 		JsonFromUrl dane = new JsonFromUrl("https://api-v3.mojepanstwo.pl/dane/poslowie/" + String.valueOf(this.idPosla)
 				+ ".json?layers[]=wyjazdy&layers[]=wydatki");
@@ -34,7 +36,7 @@ public class Posel implements Runnable {
 
 		obliczWydatki(layers);
 		obliczPodroze(layers);
-		System.out.println("zakonczono dodawanie posla o id=" + this.idPosla);
+		this.sejm.addPosla(this);
 	}
 
 	private void ustawWyjazdyCena(JSONObject data) {

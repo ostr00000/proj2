@@ -28,7 +28,7 @@ public class JsonFromUrl {
 		} catch (MalformedURLException e) {
 			System.out.println("problem z url");
 		} catch (IOException e) {
-			System.out.println("problem z odczytem");
+			System.out.println("problem z odczytem przy pobieranu danych ze strony:" + url);
 		}
 		return null;// poprawic?
 	}

@@ -2,10 +2,13 @@ package agh.obiektow.proj2;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+
 import org.json.simple.*;
 
 public class Test {
-
+	
 	/*@org.junit.Test
 	public void test() {
 		JSONObject j = (JSONObject) JSONValue.parse("{\"id\":0}");
@@ -119,10 +122,18 @@ public class Test {
 		String last=(String) links.get("last");
 		assertEquals(last,ostatnia);
 	}
+	
 	@org.junit.Test()
-	public void testSejm1() {
-		String [] args =new String []{"7","1","Anna","Ba\u0144kowska"};
-		MainProj2.main(args);
+	public void testSejm() throws MalformedURLException, IOException, InterruptedException {
+		Sejm localSejm=new Sejm(new Argumenty(new String []{"7","3"}));
+		localSejm.szukajPoslow();
 		
+		for(int i=1;i<8;i++){
+			Wiadomosc wiad=new Wiadomosc(new Argumenty(new String []{"7",String.valueOf(i),"Anna","Ba\u0144kowska"}),localSejm);
+			wiad.wypisz();
+			if(i==2){
+				assertTrue(wiad.zwrocWartosc().equals("1978.38"));
+			}
+		}
 	}
 }

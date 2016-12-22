@@ -9,7 +9,8 @@ public class MainProj2 {
 			Argumenty arg = new Argumenty(args);
 			Sejm pobraneDane = new Sejm(arg);
 			pobraneDane.szukajPoslow();
-			pobraneDane.wypisz();
+			Wiadomosc wiad=new Wiadomosc(arg,pobraneDane);
+			wiad.wypisz();
 
 		} catch (ArrayIndexOutOfBoundsException e) {
 			System.out.println(e);
@@ -21,12 +22,12 @@ public class MainProj2 {
 			System.out.println("problem ze strona");
 		} catch (IOException e) {
 			System.out.println("problem ze odczytem");
-		}catch(ArithmeticException e){
+		} catch (ArithmeticException e) {
 			System.out.println("blad danych - brak poslow");
-		//} catch (ClassCastException e) {
-		//	System.out.println("problem z typem w json\n" + e.getMessage());
+		} catch (ClassCastException e) {
+			System.out.println("problem z typem w json\n" + e.getMessage());
 		} catch (InterruptedException e) {
-			System.out.println("watek przerwany");
+			System.out.println("watek przerwanyt");
 		}
 	}
 }

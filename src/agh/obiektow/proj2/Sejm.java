@@ -43,58 +43,10 @@ public class Sejm {
 				this.info.modyfikuj(szukanie[i].info);
 			}
 		}
-		System.out.println("zakonczono szukanie");
 	}
 
 	public void addPosla(Posel kolejny) {
 		this.poslowie.put(kolejny.imieNazwisko, kolejny);
-	}
-
-	public void wypisz() {
-		String napis;
-		switch (this.arg.funkcja) {
-		case drobneNaprawy:
-		case sumaWydatkow:
-			if (!this.poslowie.containsKey(this.arg.imieNazwisko)) {
-				napis = "Brak danych dla posla " + this.arg.imieNazwisko + " podczas " + this.arg.kadencja
-						+ " kadencji";
-				break;
-			}
-			if (this.arg.funkcja == TypInfo.drobneNaprawy) {
-				napis = "Posel " + this.arg.imieNazwisko + " wydal na 'drobne naprawy i remonty biura poselskiego':"
-						+ this.poslowie.get(this.arg.imieNazwisko).wydatkiDrobneNaprawy;
-			} else {
-				napis = "Posel " + this.arg.imieNazwisko + " wydal lacznie :"
-						+ this.poslowie.get(this.arg.imieNazwisko).sumaWydatkow;
-			}
-			break;
-		case najdrozszaPodrozZagraniczna:
-			napis = "Najdrozsza podroz za granice odbyl posel" + this.info.maxCenaPodroz.imieNazwisko
-					+ ", podroz kosztowala " + this.info.maxCenaPodroz.najdrozszaPodroz;
-			break;
-		case najwiecejPodrozyZagranicznych:
-			napis = "Najwiecej podrozy za granice odbyl posel" + this.info.maxWyjazdow.imieNazwisko
-			+ ", odbyl on " + this.info.maxWyjazdow.liczbaWyjazdow+" wyjazdow";
-			break;
-		case najdluzejPrzebywalZaGranica:
-			napis = "Najdluzej za granica przebywal posel" + this.info.najduzejZaGranica.imieNazwisko
-			+ ", przbywal on " + this.info.najduzejZaGranica.dniZaGranica+" dni";
-			break;
-		case sredniaWydatkowPoslow:
-			napis = "Srednia wydatkow dla posla wynosi "+ (this.info.sumaSumWydatkow/this.info.liczbaPoslow);
-			break;
-		case odwiedziliWlochy:
-			StringBuilder build=new StringBuilder();
-			for(Posel p:poslowie.values()){
-				build.append(p.imieNazwisko).append(", ");
-			}
-			napis = "Lista poslow, ktorzy odwiedzli Wlochy: "+build.toString();
-			break;
-		default:
-			napis="";
-			break;
-		}
-		System.out.println(napis);
 	}
 
 	private int ileStron(JSONObject json) throws IOException {
