@@ -31,7 +31,7 @@ public class Sejm {
 			}
 			szukanie[i] = new WyszukaniaNaStronie(this, i);
 			threads[i] = new Thread(szukanie[i]);
-			threads[i].run();
+			threads[i].start();
 		}
 		for (int i = 0; i <= liczbaStron; i++) {
 			if(czyPrzerwac(0,liczbaStron+1,threads))

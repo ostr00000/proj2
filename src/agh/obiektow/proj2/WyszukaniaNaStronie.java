@@ -29,7 +29,7 @@ public class WyszukaniaNaStronie implements Runnable {
 			int id = Integer.valueOf((String) index.get("id"));
 			listaPoslow[i] = new Posel(id, this.sejm);
 			threads[i] = new Thread(listaPoslow[i]);
-			threads[i].run();
+			threads[i].start();
 		}
 
 		for (int i = 0; i < size; i++) {
