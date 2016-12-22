@@ -6,7 +6,7 @@ import org.json.simple.*;
 
 public class Test {
 
-	@org.junit.Test
+	/*@org.junit.Test
 	public void test() {
 		JSONObject j = (JSONObject) JSONValue.parse("{\"id\":0}");
 		System.out.println(j);
@@ -14,8 +14,7 @@ public class Test {
 		System.out.println(l);
 		double i = (double) l;
 		System.out.println(i);
-
-	}
+	}*/
 
 	@org.junit.Test
 	public void testArg1() {
@@ -124,9 +123,6 @@ public class Test {
 	public void testSejm1() {
 		String [] args =new String []{"7","1","Anna","Ba\u0144kowska"};
 		MainProj2.main(args);
-		
-		//assertEquals(arg.funkcja,);
-
 		
 	}
 }
