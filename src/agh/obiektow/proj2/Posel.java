@@ -18,6 +18,8 @@ public class Posel implements Runnable {
 	}
 
 	public void run() {
+		if (Thread.interrupted())
+			return;
 		JsonFromUrl dane = new JsonFromUrl("https://api-v3.mojepanstwo.pl/dane/poslowie/" + String.valueOf(this.idPosla)
 				+ ".json?layers[]=wyjazdy&layers[]=wydatki");
 		JSONObject json = dane.pobierzDane();
@@ -32,7 +34,7 @@ public class Posel implements Runnable {
 
 		obliczWydatki(layers);
 		obliczPodroze(layers);
-		System.out.println("zakonczono dodawanie posla o id="+this.idPosla);
+		System.out.println("zakonczono dodawanie posla o id=" + this.idPosla);
 	}
 
 	private void ustawWyjazdyCena(JSONObject data) {
