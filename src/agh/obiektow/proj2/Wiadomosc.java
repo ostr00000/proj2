@@ -92,7 +92,7 @@ public class Wiadomosc {
 	}
 
 	public void wypiszPoslow() {
-		System.out.print("lista poslow " + this.arg.getKadencja() + ". kadencji");
+		System.out.println("lista poslow " + this.arg.getKadencja() + ". kadencji");
 		for (Posel posel : this.sejm.getPoslowie().values()) {
 			System.out.println(posel.getIdPosla() + " = " + posel.getImieNazwisko());
 		}

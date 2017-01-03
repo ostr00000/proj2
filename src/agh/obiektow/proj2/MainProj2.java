@@ -11,7 +11,6 @@ public class MainProj2 {
 			pobraneDane.szukajPoslow();
 			Wiadomosc wiad=new Wiadomosc(arg,pobraneDane);
 			wiad.wypisz();
-			
 
 		} catch (ArrayIndexOutOfBoundsException e) {
 			System.out.println(e);
