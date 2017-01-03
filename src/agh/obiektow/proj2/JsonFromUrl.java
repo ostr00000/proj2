@@ -11,25 +11,43 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 public class JsonFromUrl {
-	String url; 
-	
-	JsonFromUrl(String url){
-		this.url=url;
+	private String url;
+
+	public JsonFromUrl(String url) {
+		this.url = url;
+	}
+
+	public JSONObject pobierzDane(){
+		try{
+			return this.pobierzDane(2);
+		}
+		catch (MalformedURLException e) {
+			System.out.println("problem z adresem: " + this.url);
+		} catch (IOException e) {
+			System.out.println("problem z odczytem przy pobieranu danych ze strony: " + this.url);
+		}
+		return null;
 	}
 	
-	public JSONObject pobierzDane() {
-		try (Scanner scan = new Scanner(new BufferedReader(new InputStreamReader(((new URL(this.url)).openConnection()).getInputStream() )))) {
+	private JSONObject pobierzDane(int ileRazy) throws MalformedURLException, IOException{
+		try{
+			return this.pobierz();
+		}catch(IOException e){
+			if(ileRazy!=0){
+				return this.pobierzDane(ileRazy-1);
+			}else throw e;
+		}
+	}
+	
+	private JSONObject pobierz() throws MalformedURLException, IOException  {
+		try (Scanner scan = new Scanner(
+				new BufferedReader(new InputStreamReader(((new URL(this.url)).openConnection()).getInputStream())))) {
 			StringBuilder text = new StringBuilder();
 			while (scan.hasNextLine()) {
 				text.append(scan.nextLine());
 			}
 			JSONObject ret = (JSONObject) JSONValue.parse(text.toString());
 			return ret;
-		} catch (MalformedURLException e) {
-			System.out.println("problem z url");
-		} catch (IOException e) {
-			System.out.println("problem z odczytem przy pobieranu danych ze strony:" + url);
-		}
-		return null;// poprawic?
+		} 
 	}
 }

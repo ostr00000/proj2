@@ -1,9 +1,9 @@
 package agh.obiektow.proj2;
 
 public class Argumenty {
-	TypInfo funkcja;
-	String imieNazwisko = null;
-	int kadencja;
+	private TypInfo funkcja;
+	private String imieNazwisko = null;
+	private int kadencja;
 
 	public static String blad = "Progam wypisuje informacje w zaleznosci od wybranej liczby:\n"
 			+ "1 => suma wydatków pos³a/pos³anki o okreœlonym imieniu i nazwisku\n"
@@ -15,6 +15,12 @@ public class Argumenty {
 			+ "7 => listê wszystkich pos³ów, którzy odwiedzili W³ochy";
 
 	public Argumenty(String[] args) {
+		System.out.print("Progam urzuchomiony z argumentami: ");
+		for (String arg : args) {
+			System.out.print(arg + ", ");
+		}
+		System.out.println("");
+
 		if (args.length < 2)
 			throw new ArrayIndexOutOfBoundsException("Podaj przynajmniej 2 argument");
 		kadencja = Integer.valueOf(args[0]);
@@ -43,5 +49,17 @@ public class Argumenty {
 		} else if (wybranaFunkcja == 7) {
 			funkcja = TypInfo.odwiedziliWlochy;
 		}
+	}
+	
+	public int getKadencja() {
+		return this.kadencja;
+	}
+	
+	public TypInfo getFunkcja() {
+		return this.funkcja;
+	}
+	
+	public String getImieNazwisko(){
+		return this.imieNazwisko;
 	}
 }

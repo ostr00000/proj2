@@ -9,44 +9,68 @@ import java.util.regex.Pattern;
 import org.json.simple.*;
 
 public class Sejm {
-	Argumenty arg;
-	HashMap<String, Posel> poslowie;
-	InfromacjeOgolne info = null;
+	private Argumenty arg;
+	private HashMap<String, Posel> poslowie;
+	private InfromacjeOgolne info = null;
 
 	public Sejm(Argumenty arg) {
 		this.arg = arg;
 		this.poslowie = new HashMap<String, Posel>();
 	}
+	
+	public Argumenty getArg() {
+		return arg;
+	}
+
+	public HashMap<String, Posel> getPoslowie() {
+		return poslowie;
+	}
+
+	public InfromacjeOgolne getInfo() {
+		return info;
+	}
 
 	public void szukajPoslow() throws MalformedURLException, IOException, InterruptedException {
 		JsonFromUrl dane = new JsonFromUrl(
-				"https://api-v3.mojepanstwo.pl/dane/poslowie.json?conditions[poslowie.kadencja]=" + arg.kadencja);
+				"https://api-v3.mojepanstwo.pl/dane/poslowie.json?conditions[poslowie.kadencja]=" + arg.getKadencja());
 		JSONObject json = dane.pobierzDane();
+		
 		int liczbaStron = ileStron(json);
-		WyszukaniaNaStronie[] szukanie = new WyszukaniaNaStronie[liczbaStron + 1];
-		Thread threads[] = new Thread[liczbaStron + 1];
-		for (int i = 0; i <= liczbaStron; i++) {
-			if (czyPrzerwac(0,i,threads)){
+		WyszukaniaNaStronie[] wyszukania = new WyszukaniaNaStronie[liczbaStron];
+		Thread threads[] = new Thread[liczbaStron];
+		
+		for (int i = 0; i < liczbaStron; i++) {
+			if (czyPrzerwac(0, i, threads)) {
 				return;
 			}
-			szukanie[i] = new WyszukaniaNaStronie(this, i);
-			threads[i] = new Thread(szukanie[i]);
+			wyszukania[i] = new WyszukaniaNaStronie(this, i+1);
+			threads[i] = new Thread(wyszukania[i]);
 			threads[i].start();
 		}
-		for (int i = 0; i <= liczbaStron; i++) {
-			if(czyPrzerwac(0,liczbaStron+1,threads))
+		for (int i = 0; i < liczbaStron; i++) {
+			if (czyPrzerwac(i, liczbaStron , threads))
 				return;
 			threads[i].join();
 			if (0 == i) {
-				this.info = szukanie[0].info;
+				this.info = wyszukania[0].getInfo();
 			} else {
-				this.info.modyfikuj(szukanie[i].info);
+				this.info.modyfikuj(wyszukania[i].getInfo());
 			}
 		}
 	}
 
 	public void addPosla(Posel kolejny) {
-		this.poslowie.put(kolejny.imieNazwisko, kolejny);
+		this.poslowie.put(kolejny.getImieNazwisko(), kolejny);
+	}
+	
+	public boolean czyPrzerwac(int poczatkeKonczeniaWatkow, int koniecKonczeniaWatkow, Thread[] threads) {
+		if (this.arg.getImieNazwisko() != null && this.poslowie.containsKey(this.arg.getImieNazwisko())) {
+			for (int i = poczatkeKonczeniaWatkow; i < koniecKonczeniaWatkow; i++) {
+				threads[i].interrupt();
+			}
+			return true;
+		}
+		return false;
 	}
 
 	private int ileStron(JSONObject json) throws IOException {
@@ -55,17 +79,9 @@ public class Sejm {
 		Pattern liczbaNaKoncu = Pattern.compile("(\\d+)$");
 		Matcher dopasowane = liczbaNaKoncu.matcher(lastPage);
 		if (!dopasowane.find())
-			throw new IOException();
+			throw new IOException("nie mozna dowiedziec sie ile jest stron");
 		return Integer.valueOf(lastPage.substring(dopasowane.start()));
 	}
-	private boolean czyPrzerwac(int poczatkeKonczeniaWatkow, int koniecKonczeniaWatkow, Thread[] threads) {
-		if (this.arg.imieNazwisko != null && this.poslowie.containsKey(this.arg.imieNazwisko)) {
-			for (int i = poczatkeKonczeniaWatkow; i < koniecKonczeniaWatkow; i++) {
-				threads[i].interrupt();
-			}
-			return true;
-		}
-		return false;
-	}
+
 
 }

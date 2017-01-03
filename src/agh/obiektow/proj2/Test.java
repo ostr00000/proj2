@@ -7,6 +7,8 @@ import java.net.MalformedURLException;
 
 import org.json.simple.*;
 
+@SuppressWarnings("unused")
+
 public class Test {
 	
 	/*@org.junit.Test
@@ -22,9 +24,9 @@ public class Test {
 	@org.junit.Test
 	public void testArg1() {
 		Argumenty arg = new Argumenty(new String[] { "7", "1", "Ala", "Kot" });
-		assertEquals(arg.funkcja, TypInfo.sumaWydatkow);
-		assertEquals(arg.kadencja, 7);
-		assertEquals(arg.imieNazwisko, "Ala Kot");
+		assertEquals(arg.getFunkcja(), TypInfo.sumaWydatkow);
+		assertEquals(arg.getKadencja(), 7);
+		assertEquals(arg.getImieNazwisko(), "Ala Kot");
 
 	}
 	//zla kadencja
@@ -73,44 +75,44 @@ public class Test {
 	@org.junit.Test
 	public void testArg9() {
 		Argumenty arg = new Argumenty(new String []{"8","3"});
-		assertEquals(arg.funkcja,TypInfo.sredniaWydatkowPoslow);
-		assertNotEquals(arg.kadencja,7);
+		assertEquals(arg.getFunkcja(),TypInfo.sredniaWydatkowPoslow);
+		assertNotEquals(arg.getKadencja(),7);
 	}
 	
 	@org.junit.Test
 	public void testArg10() {
 		Argumenty arg = new Argumenty(new String []{"8","2","Ala","Kot"});
-		assertEquals(arg.funkcja,TypInfo.drobneNaprawy);
-		assertEquals(arg.kadencja,8);
-		assertEquals(arg.imieNazwisko,"Ala Kot");
+		assertEquals(arg.getFunkcja(),TypInfo.drobneNaprawy);
+		assertEquals(arg.getKadencja(),8);
+		assertEquals(arg.getImieNazwisko(),"Ala Kot");
 	}
 	@org.junit.Test
 	public void testArg11() {
 		Argumenty arg = new Argumenty(new String []{"8","4","Ala","Kot"});
-		assertEquals(arg.funkcja,TypInfo.najwiecejPodrozyZagranicznych);
-		assertEquals(arg.kadencja,8);
-		assertEquals(arg.imieNazwisko,null);
+		assertEquals(arg.getFunkcja(),TypInfo.najwiecejPodrozyZagranicznych);
+		assertEquals(arg.getKadencja(),8);
+		assertEquals(arg.getImieNazwisko(),null);
 	}
 	@org.junit.Test
 	public void testArg12() {
 		Argumenty arg = new Argumenty(new String []{"7","5","Ala","ma","Kot"});
-		assertEquals(arg.funkcja,TypInfo.najdluzejPrzebywalZaGranica);
-		assertEquals(arg.kadencja,7);
-		assertEquals(arg.imieNazwisko,null);
+		assertEquals(arg.getFunkcja(),TypInfo.najdluzejPrzebywalZaGranica);
+		assertEquals(arg.getKadencja(),7);
+		assertEquals(arg.getImieNazwisko(),null);
 	}
 	@org.junit.Test
 	public void testArg13() {
 		Argumenty arg = new Argumenty(new String []{"7","6","Ala","ma","Kot"});
-		assertEquals(arg.funkcja,TypInfo.najdrozszaPodrozZagraniczna);
-		assertEquals(arg.kadencja,7);
-		assertEquals(arg.imieNazwisko,null);
+		assertEquals(arg.getFunkcja(),TypInfo.najdrozszaPodrozZagraniczna);
+		assertEquals(arg.getKadencja(),7);
+		assertEquals(arg.getImieNazwisko(),null);
 	}
 	@org.junit.Test
 	public void testArg14() {
 		Argumenty arg = new Argumenty(new String []{"7","7"});
-		assertEquals(arg.funkcja,TypInfo.odwiedziliWlochy);
-		assertEquals(arg.kadencja,7);
-		assertEquals(arg.imieNazwisko,null);
+		assertEquals(arg.getFunkcja(),TypInfo.odwiedziliWlochy);
+		assertEquals(arg.getKadencja(),7);
+		assertEquals(arg.getImieNazwisko(),null);
 	}
 	@org.junit.Test
 	public void testJsonFromUrl() {
@@ -135,5 +137,19 @@ public class Test {
 				assertTrue(wiad.zwrocWartosc().equals("1978.38"));
 			}
 		}
+		Wiadomosc wiad=new Wiadomosc(new Argumenty(new String []{"7","1","Ewa","Kopacz"}),localSejm);
+		wiad.wypisz();
+		wiad=new Wiadomosc(new Argumenty(new String []{"7","2","Ewa","Kopacz"}),localSejm);
+		wiad.wypisz();
+		wiad=new Wiadomosc(new Argumenty(new String []{"7","1","Donald","Tusk"}),localSejm);
+		wiad.wypisz();
+		wiad=new Wiadomosc(new Argumenty(new String []{"7","2","Donald","Tusk"}),localSejm);
+		wiad.wypisz();
+		wiad=new Wiadomosc(new Argumenty(new String []{"7","1","Andrzej","Duda"}),localSejm);
+		wiad.wypisz();
+		wiad=new Wiadomosc(new Argumenty(new String []{"7","2","Andrzej","Duda"}),localSejm);
+		wiad.wypisz();
+		wiad.wypiszPoslow();
+		System.out.println(localSejm.getInfo().getLiczbaPoslow());
 	}
 }
