@@ -52,7 +52,7 @@ public class WyszukaniaNaStronie implements Runnable {
 			} catch (InterruptedException e) {
 				if (this.sejm.czyPrzerwac(i+1, size, threads))
 					return;
-				System.out.println("watek przerwany");;// jesli watek przerwany to juz znaleziono
+				System.out.println("watek przerwany");// jesli watek przerwany to juz znaleziono
 			}
 			if (0 == i) {
 				this.info = new InfromacjeOgolne(listaPoslow[0]);

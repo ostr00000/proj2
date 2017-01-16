@@ -149,7 +149,7 @@ public class Test {
 		wiad.wypisz();
 		wiad=new Wiadomosc(new Argumenty(new String []{"7","2","Andrzej","Duda"}),localSejm);
 		wiad.wypisz();
-		wiad.wypiszPoslow();
+		//wiad.wypiszPoslow();
 		System.out.println(localSejm.getInfo().getLiczbaPoslow());
 	}
 }

@@ -2,7 +2,7 @@ package agh.obiektow.proj2;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,19 +10,19 @@ import org.json.simple.*;
 
 public class Sejm {
 	private Argumenty arg;
-	private HashMap<String, Posel> poslowie;
+	private ConcurrentHashMap<String, Posel> poslowie;
 	private InfromacjeOgolne info = null;
 
 	public Sejm(Argumenty arg) {
 		this.arg = arg;
-		this.poslowie = new HashMap<String, Posel>();
+		this.poslowie = new ConcurrentHashMap<String, Posel>();
 	}
 	
 	public Argumenty getArg() {
 		return arg;
 	}
 
-	public HashMap<String, Posel> getPoslowie() {
+	public ConcurrentHashMap<String, Posel> getPoslowie() {
 		return poslowie;
 	}
 
